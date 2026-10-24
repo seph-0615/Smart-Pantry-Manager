@@ -36,10 +36,8 @@ public class PantryActivity extends AppCompatActivity {
     private TextView txtLowStockAlert;
     private EditText edtSearchIngredient;
     private Spinner spinnerIngredientFilter;
-
     private IngredientAdapter adapter;
 
-    // Keep the complete pantry separate from the displayed results.
     private final ArrayList<Ingredient> allIngredients = new ArrayList<>();
     private final ArrayList<Ingredient> ingredientList = new ArrayList<>();
 
@@ -55,16 +53,24 @@ public class PantryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantry);
 
+        // Navigate back to the dashboard.
+        Button btnBackHome = findViewById(R.id.btnBackHome);
+        btnBackHome.setOnClickListener(v -> {
+            Intent intent = new Intent(PantryActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
+
         Button btnAddIngredient = findViewById(R.id.btnAddIngredient);
 
         recyclerPantry = findViewById(R.id.recyclerPantry);
         txtEmptyPantry = findViewById(R.id.txtEmptyPantry);
-
         txtTotalIngredients = findViewById(R.id.txtTotalIngredients);
         txtExpiringSoon = findViewById(R.id.txtExpiringSoon);
         txtExpired = findViewById(R.id.txtExpired);
         txtLowStockAlert = findViewById(R.id.txtLowStockAlert);
-
         edtSearchIngredient = findViewById(R.id.edtSearchIngredient);
         spinnerIngredientFilter = findViewById(R.id.spinnerIngredientFilter);
 
@@ -77,23 +83,18 @@ public class PantryActivity extends AppCompatActivity {
                 ingredientList,
                 databaseHelper
         );
-
         recyclerPantry.setAdapter(adapter);
 
-        // Populate the filter dropdown.
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
                 filterOptions
         );
-
         spinnerAdapter.setDropDownViewResource(
                 android.R.layout.simple_spinner_dropdown_item
         );
-
         spinnerIngredientFilter.setAdapter(spinnerAdapter);
 
-        // Filter the list whenever the search text changes.
         edtSearchIngredient.addTextChangedListener(
                 new android.text.TextWatcher() {
                     @Override
@@ -108,13 +109,11 @@ public class PantryActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void afterTextChanged(
-                            android.text.Editable s) {
+                    public void afterTextChanged(android.text.Editable s) {
                     }
                 }
         );
 
-        // Filter the list whenever a dropdown option is selected.
         spinnerIngredientFilter.setOnItemSelectedListener(
                 new android.widget.AdapterView.OnItemSelectedListener() {
                     @Override
@@ -178,23 +177,21 @@ public class PantryActivity extends AppCompatActivity {
                 int expiryColumn = cursor.getColumnIndexOrThrow("expiry");
 
                 while (cursor.moveToNext()) {
-                    int id = cursor.getInt(idColumn);
-                    String name = cursor.getString(nameColumn);
-                    double quantity = cursor.getDouble(quantityColumn);
-                    String unit = cursor.getString(unitColumn);
-                    String expiry = cursor.getString(expiryColumn);
-
                     Ingredient ingredient = new Ingredient(
-                            id, name, quantity, unit, expiry
+                            cursor.getInt(idColumn),
+                            cursor.getString(nameColumn),
+                            cursor.getDouble(quantityColumn),
+                            cursor.getString(unitColumn),
+                            cursor.getString(expiryColumn)
                     );
 
                     allIngredients.add(ingredient);
 
-                    if (quantity <= LOW_STOCK_THRESHOLD) {
+                    if (ingredient.getQuantity() <= LOW_STOCK_THRESHOLD) {
                         lowStockCount++;
                     }
 
-                    Date expiryDate = parseExpiryDate(expiry);
+                    Date expiryDate = parseExpiryDate(ingredient.getExpiry());
 
                     if (expiryDate != null) {
                         if (expiryDate.before(today)) {
@@ -215,14 +212,13 @@ public class PantryActivity extends AppCompatActivity {
             }
         }
 
-        // Dashboard counts always represent the entire pantry.
         txtTotalIngredients.setText(String.valueOf(allIngredients.size()));
         txtExpiringSoon.setText(String.valueOf(expiringCount));
         txtExpired.setText(String.valueOf(expiredCount));
 
         if (lowStockCount > 0) {
             txtLowStockAlert.setText(
-                    "⚠ Low stock: " + lowStockCount
+                    "Low stock: " + lowStockCount
                             + (lowStockCount == 1
                             ? " ingredient needs restocking."
                             : " ingredients need restocking.")
@@ -243,12 +239,9 @@ public class PantryActivity extends AppCompatActivity {
         ingredientList.clear();
 
         String searchText = edtSearchIngredient.getText()
-                .toString()
-                .trim()
-                .toLowerCase(Locale.ROOT);
+                .toString().trim().toLowerCase(Locale.ROOT);
 
-        String selectedFilter = spinnerIngredientFilter
-                .getSelectedItem() == null
+        String selectedFilter = spinnerIngredientFilter.getSelectedItem() == null
                 ? "All ingredients"
                 : spinnerIngredientFilter.getSelectedItem().toString();
 
@@ -269,14 +262,12 @@ public class PantryActivity extends AppCompatActivity {
                     ? ""
                     : ingredient.getName().toLowerCase(Locale.ROOT);
 
-            // Apply name search.
             if (!name.contains(searchText)) {
                 continue;
             }
 
             Date expiryDate = parseExpiryDate(ingredient.getExpiry());
 
-            // Apply the selected dropdown filter.
             switch (selectedFilter) {
                 case "Low stock":
                     if (ingredient.getQuantity() > LOW_STOCK_THRESHOLD) {
@@ -299,7 +290,6 @@ public class PantryActivity extends AppCompatActivity {
                     break;
 
                 default:
-                    // All ingredients: no additional filter.
                     break;
             }
 
@@ -308,7 +298,6 @@ public class PantryActivity extends AppCompatActivity {
 
         adapter.notifyDataSetChanged();
 
-        // Distinguish an empty pantry from an empty search result.
         if (ingredientList.isEmpty()) {
             if (allIngredients.isEmpty()) {
                 txtEmptyPantry.setText(

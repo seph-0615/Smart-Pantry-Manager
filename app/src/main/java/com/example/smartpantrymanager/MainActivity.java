@@ -18,25 +18,17 @@ public class MainActivity extends AppCompatActivity {
         Button btnSuggestions = findViewById(R.id.btnSuggestions);
         Button btnSettings = findViewById(R.id.btnSettings);
 
-        btnPantry.setOnClickListener(v -> {
-            startActivity(new Intent(
-                    MainActivity.this,
-                    PantryActivity.class
-            ));
-        });
+        btnPantry.setOnClickListener(v ->
+                openScreen(PantryActivity.class));
 
-        btnSuggestions.setOnClickListener(v -> {
-            startActivity(new Intent(
-                    MainActivity.this,
-                    SuggestedRecipesActivity.class
-            ));
-        });
+        btnSuggestions.setOnClickListener(v ->
+                openScreen(SuggestedRecipesActivity.class));
 
-        btnSettings.setOnClickListener(v -> {
-            startActivity(new Intent(
-                    MainActivity.this,
-                    SettingsActivity.class
-            ));
-        });
+        btnSettings.setOnClickListener(v ->
+                openScreen(SettingsActivity.class));
+    }
+
+    private void openScreen(Class<?> screenClass) {
+        startActivity(new Intent(this, screenClass));
     }
 }

@@ -1,6 +1,7 @@
 
 package com.example.smartpantrymanager;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
@@ -25,8 +26,29 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        // Home navigation button.
+        Button btnBackHome = findViewById(R.id.btnBackHome);
+
+        if (btnBackHome != null) {
+            btnBackHome.setOnClickListener(v -> {
+                Intent intent = new Intent(
+                        SettingsActivity.this,
+                        MainActivity.class
+                );
+
+                intent.addFlags(
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                );
+
+                startActivity(intent);
+                finish();
+            });
+        }
+
         preferences = getSharedPreferences(
-                PREFS_NAME, MODE_PRIVATE);
+                PREFS_NAME, MODE_PRIVATE
+        );
 
         switchExpiryReminders =
                 findViewById(R.id.switchExpiryReminders);
@@ -39,10 +61,12 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Load saved preferences. Both are enabled by default.
         boolean expiryEnabled = preferences.getBoolean(
-                KEY_EXPIRY_REMINDERS, true);
+                KEY_EXPIRY_REMINDERS, true
+        );
 
         boolean lowStockEnabled = preferences.getBoolean(
-                KEY_LOW_STOCK_ALERTS, true);
+                KEY_LOW_STOCK_ALERTS, true
+        );
 
         switchExpiryReminders.setChecked(expiryEnabled);
         switchLowStockAlerts.setChecked(lowStockEnabled);
@@ -61,7 +85,8 @@ public class SettingsActivity extends AppCompatActivity {
                                     : "Expiry reminders disabled",
                             Toast.LENGTH_SHORT
                     ).show();
-                });
+                }
+        );
 
         // Save changes to the low-stock preference.
         switchLowStockAlerts.setOnCheckedChangeListener(
@@ -77,7 +102,8 @@ public class SettingsActivity extends AppCompatActivity {
                                     : "Low-stock alerts disabled",
                             Toast.LENGTH_SHORT
                     ).show();
-                });
+                }
+        );
 
         // Restore default settings.
         btnResetSettings.setOnClickListener(v -> {

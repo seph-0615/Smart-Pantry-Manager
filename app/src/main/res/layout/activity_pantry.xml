@@ -1,212 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7F2"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    android:background="#F5F7F2">
 
-    <LinearLayout
+    <!-- Back to Home header -->
+    <include layout="@layout/header_back_home" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
-
-        <View
-            android:layout_width="48dp"
-            android:layout_height="5dp"
-            android:layout_marginBottom="18dp"
-            android:background="#F28C28" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My Pantry 🥬"
-            android:textColor="#204C37"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="20dp"
-            android:text="Keep track of your ingredients and freshness."
-            android:textColor="#6B756D"
-            android:textSize="15sp" />
-
-        <Button
-            android:id="@+id/btnAddIngredient"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginBottom="18dp"
-            android:backgroundTint="#F28C28"
-            android:text="+ Add Ingredient"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:orientation="vertical"
+            android:padding="20dp">
 
+            <View
+                android:layout_width="48dp"
+                android:layout_height="5dp"
+                android:layout_marginBottom="18dp"
+                android:background="#F28C28" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My Pantry"
+                android:textColor="#204C37"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="20dp"
+                android:text="Keep track of your ingredients and freshness."
+                android:textColor="#6B756D"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/btnAddIngredient"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_marginBottom="18dp"
+                android:backgroundTint="#F28C28"
+                android:text="+ Add Ingredient"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Pantry statistics -->
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="6dp"
-                android:background="#E7F1E5"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="6dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🥬"
-                    android:textSize="21sp" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="#E7F1E5"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="6dp">
 
-                <TextView
-                    android:id="@+id/txtTotalIngredients"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="#204C37"
-                    android:textSize="23sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total"
+                        android:textColor="#536357"
+                        android:textSize="12sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total"
-                    android:textColor="#536357"
-                    android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/txtTotalIngredients"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="#204C37"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:background="#FFF0DE"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Expiring"
+                        android:textColor="#80552E"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtExpiringSoon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="#A75A0B"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    android:background="#FBE8E6"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="6dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Expired"
+                        android:textColor="#8C3933"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtExpired"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="#B3261E"
+                        android:textSize="23sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
+            <TextView
+                android:id="@+id/txtLowStockAlert"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="18dp"
                 android:background="#FFF0DE"
+                android:padding="14dp"
+                android:text="Low stock alert"
+                android:textColor="#80552E"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/edtSearchIngredient"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginBottom="10dp"
+                android:background="#FFFFFF"
+                android:hint="Search ingredients..."
+                android:inputType="text"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:textColor="#204C37"
+                android:textColorHint="#829087"
+                android:textSize="15sp" />
+
+            <Spinner
+                android:id="@+id/spinnerIngredientFilter"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginBottom="16dp"
+                android:background="#E7F1E5"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp" />
+
+            <TextView
+                android:id="@+id/txtEmptyPantry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:padding="6dp">
+                android:padding="24dp"
+                android:text="Your pantry is empty.\nAdd an ingredient to get started!"
+                android:textColor="#6B756D"
+                android:textSize="16sp"
+                android:lineSpacingExtra="6dp"
+                android:visibility="gone" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="⏳"
-                    android:textSize="21sp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerPantry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:clipToPadding="false"
+                android:paddingBottom="12dp" />
 
-                <TextView
-                    android:id="@+id/txtExpiringSoon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="#A75A0B"
-                    android:textSize="23sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Expiring"
-                    android:textColor="#80552E"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:layout_marginStart="6dp"
-                android:background="#FBE8E6"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="6dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="⚠️"
-                    android:textSize="21sp" />
-
-                <TextView
-                    android:id="@+id/txtExpired"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0"
-                    android:textColor="#B3261E"
-                    android:textSize="23sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Expired"
-                    android:textColor="#8C3933"
-                    android:textSize="12sp" />
-            </LinearLayout>
         </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/txtLowStockAlert"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="18dp"
-            android:background="#FFF0DE"
-            android:padding="14dp"
-            android:text="Low stock alert"
-            android:textColor="#80552E"
-            android:textSize="14sp"
-            android:visibility="gone" />
-
-        <EditText
-            android:id="@+id/edtSearchIngredient"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginBottom="10dp"
-            android:background="#FFFFFF"
-            android:hint="Search ingredients..."
-            android:inputType="text"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            android:textColor="#204C37"
-            android:textColorHint="#829087"
-            android:textSize="15sp" />
-
-        <Spinner
-            android:id="@+id/spinnerIngredientFilter"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginBottom="16dp"
-            android:background="#E7F1E5"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp" />
-
-        <TextView
-            android:id="@+id/txtEmptyPantry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="24dp"
-            android:text="🌱 Your pantry is empty.\nAdd an ingredient to get started!"
-            android:textColor="#6B756D"
-            android:textSize="16sp"
-            android:lineSpacingExtra="6dp"
-            android:visibility="gone" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerPantry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            android:clipToPadding="false"
-            android:paddingBottom="12dp" />
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

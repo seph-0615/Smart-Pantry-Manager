@@ -1,9 +1,11 @@
 
 package com.example.smartpantrymanager;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -30,8 +32,25 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
         recipeContainer = findViewById(R.id.recipeContainer);
 
-        Button btnRefresh = findViewById(R.id.btnRefreshRecipes);
+        // Return to the Home dashboard.
+        Button btnBackHome = findViewById(R.id.btnBackHome);
+        if (btnBackHome != null) {
+            btnBackHome.setOnClickListener(v -> {
+                Intent intent = new Intent(
+                        SuggestedRecipesActivity.this,
+                        MainActivity.class
+                );
+                intent.addFlags(
+                        Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                );
+                startActivity(intent);
+                finish();
+            });
+        }
 
+        // Refresh recipe suggestions.
+        Button btnRefresh = findViewById(R.id.btnRefreshRecipes);
         if (btnRefresh != null) {
             btnRefresh.setOnClickListener(v -> showRecipes());
         }
@@ -55,7 +74,7 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
 
         recipeContainer.removeAllViews();
 
-        // Keep the existing recipe-matching logic.
+        // Preserve the existing recipe-matching logic.
         ArrayList<String[]> recipes =
                 databaseHelper.getMatchingRecipes();
 
@@ -88,12 +107,13 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
 
             emptyMessage.setTextSize(16);
             emptyMessage.setTextColor(TEXT_GREY);
-            emptyMessage.setGravity(android.view.Gravity.CENTER);
+            emptyMessage.setGravity(Gravity.CENTER);
             emptyMessage.setLineSpacing(5, 1.0f);
             emptyMessage.setPadding(20, 28, 20, 28);
 
-            emptyMessage.setBackground(createBackground(
-                    0xFFFFFFFF, 0xFFDCE7DC, 18));
+            emptyMessage.setBackground(
+                    createBackground(0xFFFFFFFF, 0xFFDCE7DC, 18)
+            );
 
             recipeContainer.addView(emptyMessage);
             return;
@@ -132,31 +152,33 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         card.setOrientation(LinearLayout.VERTICAL);
         card.setPadding(20, 20, 20, 20);
 
-        card.setBackground(createBackground(
-                0xFFFFFFFF, 0xFFDCE7DC, 18));
+        card.setBackground(
+                createBackground(0xFFFFFFFF, 0xFFDCE7DC, 18)
+        );
 
         LinearLayout.LayoutParams cardParams =
                 new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
 
         cardParams.setMargins(0, 0, 0, 20);
         card.setLayoutParams(cardParams);
         card.setElevation(5);
 
-        // Orange accent strip
+        // Orange accent strip.
         View accent = new View(this);
-        accent.setBackground(createBackground(
-                ORANGE, ORANGE, 4));
+        accent.setBackground(createBackground(ORANGE, ORANGE, 4));
 
         LinearLayout.LayoutParams accentParams =
                 new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, 5);
+                        LinearLayout.LayoutParams.MATCH_PARENT, 5
+                );
 
         accentParams.setMargins(0, 0, 0, 16);
         card.addView(accent, accentParams);
 
-        // Recipe title
+        // Recipe title.
         TextView name = new TextView(this);
         name.setText(recipeName);
         name.setTextSize(21);
@@ -165,7 +187,7 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         name.setLineSpacing(3, 1.0f);
         card.addView(name);
 
-        // Status badge
+        // Status badge.
         TextView statusView = new TextView(this);
         statusView.setText(status);
         statusView.setTextSize(12);
@@ -178,29 +200,32 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         int statusBackground = ready ? 0xFFE6F4E8 : 0xFFFFF1D6;
 
         statusView.setTextColor(statusColor);
-        statusView.setBackground(createBackground(
-                statusBackground, statusBackground, 12));
+        statusView.setBackground(
+                createBackground(statusBackground, statusBackground, 12)
+        );
 
         LinearLayout.LayoutParams statusParams =
                 new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
 
         statusParams.setMargins(0, 12, 0, 20);
         card.addView(statusView, statusParams);
 
-        // Divider
+        // Divider.
         View divider = new View(this);
         divider.setBackgroundColor(0xFFE5EBE5);
 
         LinearLayout.LayoutParams dividerParams =
                 new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                        LinearLayout.LayoutParams.MATCH_PARENT, 1
+                );
 
         dividerParams.setMargins(0, 0, 0, 16);
         card.addView(divider, dividerParams);
 
-        // Preparation heading
+        // Preparation heading.
         TextView methodHeading = new TextView(this);
         methodHeading.setText("PREPARATION");
         methodHeading.setTextSize(12);
@@ -209,7 +234,7 @@ public class SuggestedRecipesActivity extends AppCompatActivity {
         methodHeading.setTypeface(null, Typeface.BOLD);
         card.addView(methodHeading);
 
-        // Preparation instructions
+        // Preparation instructions.
         TextView methodView = new TextView(this);
         methodView.setText(method);
         methodView.setTextSize(15);

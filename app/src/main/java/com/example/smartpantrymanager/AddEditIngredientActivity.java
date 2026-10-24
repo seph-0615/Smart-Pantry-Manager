@@ -1,6 +1,7 @@
 
 package com.example.smartpantrymanager;
 
+import android.app.DatePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.Button;
@@ -8,6 +9,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class AddEditIngredientActivity extends AppCompatActivity {
 
@@ -18,6 +25,9 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper;
     private int ingredientId = -1;
+
+    private final SimpleDateFormat dateFormat =
+            new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +43,11 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
         databaseHelper = new DatabaseHelper(this);
 
+        dateFormat.setLenient(false);
+
         ingredientId = getIntent().getIntExtra("ingredient_id", -1);
+
+        editExpiry.setOnClickListener(v -> showExpiryDatePicker());
 
         if (ingredientId != -1) {
             loadIngredient();
@@ -45,6 +59,54 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         btnSave.setOnClickListener(v -> saveIngredient());
     }
 
+    private void showExpiryDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+
+        String currentDate = editExpiry.getText().toString().trim();
+
+        if (!currentDate.isEmpty()) {
+            try {
+                Date date = dateFormat.parse(currentDate);
+
+                if (date != null) {
+                    calendar.setTime(date);
+                }
+            } catch (ParseException ignored) {
+                // Use today's date if the existing value is invalid.
+            }
+        }
+
+        DatePickerDialog dialog = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    String selectedDate = String.format(
+                            Locale.US,
+                            "%04d-%02d-%02d",
+                            year,
+                            month + 1,
+                            dayOfMonth
+                    );
+
+                    editExpiry.setText(selectedDate);
+                    editExpiry.setError(null);
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+        );
+
+        dialog.setButton(
+                DatePickerDialog.BUTTON_NEUTRAL,
+                "Clear date",
+                (dialogInterface, which) -> {
+                    editExpiry.setText("");
+                    editExpiry.setError(null);
+                }
+        );
+
+        dialog.show();
+    }
+
     private void loadIngredient() {
         Cursor cursor = databaseHelper.getIngredientById(ingredientId);
 
@@ -54,6 +116,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                     "Could not load ingredient.",
                     Toast.LENGTH_LONG
             ).show();
+            finish();
             return;
         }
 
@@ -87,6 +150,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 editQuantity.setText(String.valueOf(quantity));
                 editUnit.setText(unit);
                 editExpiry.setText(expiry == null ? "" : expiry);
+
             } else {
                 Toast.makeText(
                         this,
@@ -95,12 +159,15 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 ).show();
                 finish();
             }
+
         } catch (IllegalArgumentException e) {
             Toast.makeText(
                     this,
                     "Could not read ingredient details.",
                     Toast.LENGTH_LONG
             ).show();
+            finish();
+
         } finally {
             cursor.close();
         }
@@ -108,7 +175,8 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
     private void saveIngredient() {
         String name = editName.getText().toString().trim();
-        String quantityText = editQuantity.getText().toString().trim();
+        String quantityText =
+                editQuantity.getText().toString().trim();
         String unit = editUnit.getText().toString().trim();
         String expiry = editExpiry.getText().toString().trim();
 
@@ -138,7 +206,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 || Double.isInfinite(quantity)
                 || quantity <= 0) {
             editQuantity.setError(
-                    "Quantity must be a positive number"
+                    "Quantity must be greater than zero"
             );
             editQuantity.requestFocus();
             return;
@@ -148,6 +216,24 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             editUnit.setError("Enter a unit, e.g. kg or pieces");
             editUnit.requestFocus();
             return;
+        }
+
+        if (!expiry.isEmpty()) {
+            try {
+                Date parsedDate = dateFormat.parse(expiry);
+
+                if (parsedDate == null
+                        || !dateFormat.format(parsedDate).equals(expiry)) {
+                    throw new ParseException("Invalid date", 0);
+                }
+
+            } catch (ParseException e) {
+                editExpiry.setError(
+                        "Choose a valid expiry date"
+                );
+                editExpiry.requestFocus();
+                return;
+            }
         }
 
         boolean saved;
@@ -181,6 +267,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             ).show();
 
             finish();
+
         } else {
             Toast.makeText(
                     this,

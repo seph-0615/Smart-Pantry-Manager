@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="#FFFFFF"
+    android:elevation="8dp"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp">
+
+    <Button
+        android:id="@+id/navHome"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Home"
+        android:textAllCaps="false"
+        android:textSize="11sp"
+        android:textColor="#204C37"
+        android:backgroundTint="#FFFFFF"
+        android:minWidth="0dp"
+        android:padding="2dp" />
+
+    <Button
+        android:id="@+id/navPantry"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Pantry"
+        android:textAllCaps="false"
+        android:textSize="11sp"
+        android:textColor="#204C37"
+        android:backgroundTint="#FFFFFF"
+        android:minWidth="0dp"
+        android:padding="2dp" />
+
+    <Button
+        android:id="@+id/navRecipes"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Recipes"
+        android:textAllCaps="false"
+        android:textSize="11sp"
+        android:textColor="#204C37"
+        android:backgroundTint="#FFFFFF"
+        android:minWidth="0dp"
+        android:padding="2dp" />
+
+    <Button
+        android:id="@+id/navSettings"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Settings"
+        android:textAllCaps="false"
+        android:textSize="11sp"
+        android:textColor="#204C37"
+        android:backgroundTint="#FFFFFF"
+        android:minWidth="0dp"
+        android:padding="2dp" />
+
+</LinearLayout>
