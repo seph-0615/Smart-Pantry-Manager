@@ -2,8 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F7F2"
-    android:fillViewport="true">
+    android:background="#F5F7F1"
+    android:fillViewport="true"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,77 +15,159 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Ingredient"
-            android:textColor="#234B35"
-            android:textSize="28sp"
+            android:text="Your Ingredients"
+            android:textColor="#347653"
+            android:textSize="14sp"
             android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/txtIngredientFormTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Ingredient"
+            android:textColor="#244B38"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Keep your pantry organised and your food fresh."
+            android:textColor="#68796C"
+            android:textSize="15sp"
+            android:lineSpacingExtra="3dp"
             android:layout_marginBottom="24dp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="@drawable/bg_edit_form"
+            android:elevation="2dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ingredient name"
+                android:textColor="#244B38"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/editIngredientName"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:hint="e.g. Rice"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
+                android:textColor="#263B2E"
+                android:textColorHint="#89968C"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Quantity"
+                android:textColor="#244B38"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/editIngredientQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:hint="e.g. 2"
+                android:singleLine="true"
+                android:inputType="numberDecimal"
+                android:textColor="#263B2E"
+                android:textColorHint="#89968C"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Unit of measurement"
+                android:textColor="#244B38"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/editIngredientUnit"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:hint="e.g. kg, litres, pieces"
+                android:singleLine="true"
+                android:inputType="textCapSentences"
+                android:textColor="#263B2E"
+                android:textColorHint="#89968C"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Expiry date (optional)"
+                android:textColor="#244B38"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/editIngredientExpiry"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:hint="YYYY-MM-DD"
+                android:singleLine="true"
+                android:inputType="text"
+                android:textColor="#263B2E"
+                android:textColorHint="#89968C"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnSaveIngredient"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/bg_add_button"
+                android:text="Save Ingredient"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:minHeight="56dp" />
+
+        </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ingredient name"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/editIngredientName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="e.g. Rice"
-            android:inputType="textCapSentences"
-            android:minHeight="48dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Quantity"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
-
-        <EditText
-            android:id="@+id/editIngredientQuantity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="e.g. 2"
-            android:inputType="numberDecimal"
-            android:minHeight="48dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Unit"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
-
-        <EditText
-            android:id="@+id/editIngredientUnit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="e.g. kg, litres, pieces"
-            android:inputType="textCapSentences"
-            android:minHeight="48dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Expiry date (optional)"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp" />
-
-        <EditText
-            android:id="@+id/editIngredientExpiry"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="e.g. 2026-11-30"
-            android:inputType="date"
-            android:minHeight="48dp" />
-
-        <Button
-            android:id="@+id/btnSaveIngredient"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:text="Save Ingredient" />
+            android:gravity="center"
+            android:text="A little organisation makes cooking easier. 🌱"
+            android:textColor="#68796C"
+            android:textSize="13sp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="12dp" />
 
     </LinearLayout>
 </ScrollView>

@@ -2,50 +2,69 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
     android:orientation="vertical"
     android:padding="16dp"
-    android:layout_marginBottom="12dp"
-    android:background="#F1F8E9">
+    android:background="@drawable/bg_pantry_card"
+    android:elevation="3dp">
 
     <TextView
         android:id="@+id/txtIngredientName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Ingredient name"
-        android:textColor="#1B5E20"
-        android:textSize="20sp"
+        android:textColor="#204C37"
+        android:textSize="19sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/txtIngredientQuantity"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="Quantity: 1 kg"
-        android:textColor="#333333"
-        android:textSize="16sp" />
+        android:layout_marginTop="10dp"
+        android:background="#E7F1E5"
+        android:padding="8dp"
+        android:text="Quantity"
+        android:textColor="#204C37"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/txtIngredientExpiry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Expiry date: Not specified"
-        android:textColor="#555555"
+        android:layout_marginTop="10dp"
+        android:text="Expiry date"
+        android:textColor="#6B756D"
         android:textSize="14sp" />
 
-    <Button
-        android:id="@+id/btnEditIngredient"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Edit Ingredient" />
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/btnDeleteIngredient"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Delete Ingredient"
-        android:textColor="#B3261E" />
+        <Button
+            android:id="@+id/btnEditIngredient"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:backgroundTint="#F28C28"
+            android:text="Edit"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnDeleteIngredient"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:backgroundTint="#FBE8E6"
+            android:text="Delete"
+            android:textColor="#B3261E"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </LinearLayout>

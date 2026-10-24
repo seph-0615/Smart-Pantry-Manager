@@ -13,9 +13,8 @@ import java.util.Locale;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "smart_pantry.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
-    public static final String TABLE_PANTRY = "pantry";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_QUANTITY = "quantity";
@@ -37,350 +36,455 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         createPantryTable(db);
         createRecipeTables(db);
+
+        db.delete("recipe_ingredients", null, null);
         seedRecipes(db);
     }
 
     private void createPantryTable(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS pantry (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name TEXT NOT NULL, " +
-                "quantity REAL NOT NULL, " +
-                "unit TEXT NOT NULL, " +
-                "expiry TEXT)");
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS pantry (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "name TEXT NOT NULL, " +
+                        "quantity REAL NOT NULL, " +
+                        "unit TEXT NOT NULL, " +
+                        "expiry TEXT)"
+        );
     }
 
     private void createRecipeTables(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS recipes (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "name TEXT NOT NULL UNIQUE, " +
-                "method TEXT NOT NULL)");
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS recipes (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "name TEXT UNIQUE NOT NULL, " +
+                        "method TEXT NOT NULL)"
+        );
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS recipe_ingredients (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "recipe_id INTEGER NOT NULL, " +
-                "ingredient_name TEXT NOT NULL, " +
-                "quantity REAL NOT NULL, " +
-                "unit TEXT NOT NULL)");
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS recipe_ingredients (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "recipe_id INTEGER NOT NULL, " +
+                        "ingredient_name TEXT NOT NULL, " +
+                        "quantity REAL NOT NULL, " +
+                        "unit TEXT NOT NULL, " +
+                        "FOREIGN KEY(recipe_id) REFERENCES recipes(id))"
+        );
     }
 
     private void seedRecipes(SQLiteDatabase db) {
         addRecipe(db, "Egg Fried Rice",
-                "1. Cook the rice.\n2. Scramble the eggs in a pan.\n" +
-                        "3. Add oil and rice, then stir-fry.",
-                new String[][]{
-                        {"rice", "1", "cup"},
-                        {"egg", "2", "pieces"},
-                        {"oil", "1", "tbsp"}
-                });
+                "1. Cook the rice.\n2. Heat oil in a pan.\n" +
+                        "3. Add the eggs and stir.\n4. Add the rice and mix well.",
+                new String[]{"rice", "egg", "oil"},
+                new double[]{1, 2, 1},
+                new String[]{"cup", "pieces", "tbsp"});
 
         addRecipe(db, "Tomato Pasta",
-                "1. Cook the pasta.\n2. Cook chopped tomatoes in oil.\n" +
-                        "3. Mix the sauce with the pasta.",
-                new String[][]{
-                        {"pasta", "200", "g"},
-                        {"tomato", "2", "pieces"},
-                        {"oil", "1", "tbsp"}
-                });
+                "1. Cook the pasta.\n2. Chop the tomatoes.\n" +
+                        "3. Heat oil in a pan.\n4. Add tomatoes and cook.\n" +
+                        "5. Mix with the pasta.",
+                new String[]{"pasta", "tomato", "oil"},
+                new double[]{200, 2, 1},
+                new String[]{"g", "pieces", "tbsp"});
 
         addRecipe(db, "Vegetable Omelette",
                 "1. Beat the eggs.\n2. Chop the onion and tomato.\n" +
-                        "3. Cook everything in a pan.",
-                new String[][]{
-                        {"egg", "2", "pieces"},
-                        {"onion", "1", "pieces"},
-                        {"tomato", "1", "pieces"}
-                });
+                        "3. Add vegetables to the eggs.\n4. Cook in a lightly oiled pan.",
+                new String[]{"egg", "onion", "tomato"},
+                new double[]{2, 1, 1},
+                new String[]{"pieces", "pieces", "pieces"});
 
         addRecipe(db, "Banana Pancakes",
                 "1. Mash the banana.\n2. Mix with egg and flour.\n" +
-                        "3. Cook small pancakes in a pan.",
-                new String[][]{
-                        {"banana", "1", "pieces"},
-                        {"egg", "1", "pieces"},
-                        {"flour", "100", "g"}
-                });
+                        "3. Cook small portions in a pan until golden.",
+                new String[]{"banana", "egg", "flour"},
+                new double[]{1, 1, 100},
+                new String[]{"pieces", "pieces", "g"});
 
         addRecipe(db, "Potato and Onion Fry",
-                "1. Chop potatoes and onion.\n" +
-                        "2. Heat oil in a pan.\n3. Fry until tender.",
-                new String[][]{
-                        {"potato", "2", "pieces"},
-                        {"onion", "1", "pieces"},
-                        {"oil", "1", "tbsp"}
-                });
+                "1. Peel and chop the potatoes.\n2. Chop the onion.\n" +
+                        "3. Fry both ingredients until tender.",
+                new String[]{"potato", "onion", "oil"},
+                new double[]{2, 1, 1},
+                new String[]{"pieces", "pieces", "tbsp"});
 
         addRecipe(db, "Rice and Beans",
-                "1. Cook the rice.\n2. Heat the beans thoroughly.\n" +
-                        "3. Serve together.",
-                new String[][]{
-                        {"rice", "1", "cup"},
-                        {"beans", "1", "cup"}
-                });
+                "1. Cook the rice.\n2. Heat the beans.\n3. Mix and serve.",
+                new String[]{"rice", "beans"},
+                new double[]{1, 1},
+                new String[]{"cup", "cup"});
 
         addRecipe(db, "Tomato Egg Scramble",
-                "1. Chop tomatoes.\n2. Cook them in oil.\n" +
-                        "3. Add beaten eggs and cook thoroughly.",
-                new String[][]{
-                        {"tomato", "2", "pieces"},
-                        {"egg", "2", "pieces"},
-                        {"oil", "1", "tbsp"}
-                });
+                "1. Chop and cook the tomatoes.\n" +
+                        "2. Add beaten eggs and stir until cooked.",
+                new String[]{"tomato", "egg", "oil"},
+                new double[]{2, 2, 1},
+                new String[]{"pieces", "pieces", "tbsp"});
 
         addRecipe(db, "Garlic Pasta",
-                "1. Cook pasta.\n2. Gently fry garlic in oil.\n" +
-                        "3. Mix together.",
-                new String[][]{
-                        {"pasta", "200", "g"},
-                        {"garlic", "2", "pieces"},
-                        {"oil", "1", "tbsp"}
-                });
+                "1. Cook the pasta.\n2. Chop the garlic.\n" +
+                        "3. Fry garlic in oil.\n4. Add pasta and mix.",
+                new String[]{"pasta", "garlic", "oil"},
+                new double[]{200, 2, 1},
+                new String[]{"g", "pieces", "tbsp"});
 
         addRecipe(db, "Potato Egg Hash",
-                "1. Dice the potatoes.\n2. Fry in oil until tender.\n" +
-                        "3. Add eggs and cook thoroughly.",
-                new String[][]{
-                        {"potato", "2", "pieces"},
-                        {"egg", "2", "pieces"},
-                        {"oil", "1", "tbsp"}
-                });
+                "1. Chop and cook the potatoes.\n" +
+                        "2. Add eggs and cook until done.",
+                new String[]{"potato", "egg", "oil"},
+                new double[]{2, 2, 1},
+                new String[]{"pieces", "pieces", "tbsp"});
 
         addRecipe(db, "Carrot Soup",
-                "1. Chop carrots and onion.\n2. Boil in water until tender.\n" +
-                        "3. Mash or blend.",
-                new String[][]{
-                        {"carrot", "3", "pieces"},
-                        {"onion", "1", "pieces"}
-                });
+                "1. Peel and chop the carrots.\n2. Boil until soft.\n" +
+                        "3. Blend or mash until smooth.",
+                new String[]{"carrot", "onion"},
+                new double[]{3, 1},
+                new String[]{"pieces", "pieces"});
 
         addRecipe(db, "Banana Oatmeal",
-                "1. Cook oats in water.\n2. Slice the banana.\n" +
-                        "3. Serve the banana with the oats.",
-                new String[][]{
-                        {"oats", "50", "g"},
-                        {"banana", "1", "pieces"}
-                });
+                "1. Cook the oats according to the packet.\n" +
+                        "2. Slice the banana and add it to the oats.",
+                new String[]{"oats", "banana"},
+                new double[]{1, 1},
+                new String[]{"cup", "pieces"});
 
         addRecipe(db, "Cheese Omelette",
-                "1. Beat the eggs.\n2. Cook in a lightly oiled pan.\n" +
-                        "3. Add cheese and fold.",
-                new String[][]{
-                        {"egg", "2", "pieces"},
-                        {"cheese", "30", "g"},
-                        {"oil", "1", "tbsp"}
-                });
+                "1. Beat the eggs.\n2. Add grated cheese.\n" +
+                        "3. Cook in a pan until set.",
+                new String[]{"egg", "cheese", "oil"},
+                new double[]{2, 30, 1},
+                new String[]{"pieces", "g", "tbsp"});
 
         addRecipe(db, "Garlic Rice",
-                "1. Cook rice.\n2. Fry garlic in oil.\n" +
+                "1. Cook the rice.\n2. Fry chopped garlic in oil.\n" +
                         "3. Add rice and stir.",
-                new String[][]{
-                        {"rice", "1", "cup"},
-                        {"garlic", "2", "pieces"},
-                        {"oil", "1", "tbsp"}
-                });
+                new String[]{"rice", "garlic", "oil"},
+                new double[]{1, 2, 1},
+                new String[]{"cup", "pieces", "tbsp"});
 
         addRecipe(db, "Tomato and Onion Salad",
-                "1. Chop tomatoes and onion.\n" +
-                        "2. Mix in a bowl.\n3. Serve fresh.",
-                new String[][]{
-                        {"tomato", "2", "pieces"},
-                        {"onion", "1", "pieces"}
-                });
+                "1. Chop the tomatoes and onion.\n" +
+                        "2. Mix in a bowl and serve.",
+                new String[]{"tomato", "onion"},
+                new double[]{2, 1},
+                new String[]{"pieces", "pieces"});
 
         addRecipe(db, "Flour Flatbread",
-                "1. Mix flour and water into dough.\n" +
-                        "2. Knead and flatten.\n3. Cook in a hot pan.",
-                new String[][]{
-                        {"flour", "200", "g"},
-                        {"water", "100", "ml"}
-                });
+                "1. Mix flour with enough water to form a dough.\n" +
+                        "2. Knead, roll flat, and cook in a hot pan.",
+                new String[]{"flour"},
+                new double[]{200},
+                new String[]{"g"});
     }
 
-    private void addRecipe(SQLiteDatabase db, String name,
-                           String method, String[][] ingredients) {
-        ContentValues recipe = new ContentValues();
-        recipe.put("name", name);
-        recipe.put("method", method);
+    private void addRecipe(
+            SQLiteDatabase db,
+            String name,
+            String method,
+            String[] ingredientNames,
+            double[] quantities,
+            String[] units) {
 
-        long recipeId = db.insertWithOnConflict(
-                "recipes", null, recipe, SQLiteDatabase.CONFLICT_IGNORE);
+        ContentValues recipeValues = new ContentValues();
+        recipeValues.put("name", name);
+        recipeValues.put("method", method);
 
-        if (recipeId == -1) {
-            try (Cursor c = db.query(
-                    "recipes", new String[]{"id"}, "name = ?",
-                    new String[]{name}, null, null, null)) {
-                if (c.moveToFirst()) {
-                    recipeId = c.getLong(0);
-                }
+        db.insertWithOnConflict(
+                "recipes",
+                null,
+                recipeValues,
+                SQLiteDatabase.CONFLICT_IGNORE
+        );
+
+        int recipeId = -1;
+
+        try (Cursor cursor = db.query(
+                "recipes",
+                new String[]{"id"},
+                "name = ?",
+                new String[]{name},
+                null,
+                null,
+                null)) {
+
+            if (cursor.moveToFirst()) {
+                recipeId = cursor.getInt(
+                        cursor.getColumnIndexOrThrow("id"));
             }
         }
 
-        if (recipeId == -1) return;
+        if (recipeId == -1) {
+            return;
+        }
 
-        for (String[] ingredient : ingredients) {
+        for (int i = 0; i < ingredientNames.length; i++) {
             ContentValues values = new ContentValues();
             values.put("recipe_id", recipeId);
-            values.put("ingredient_name", ingredient[0]);
-            values.put("quantity", Double.parseDouble(ingredient[1]));
-            values.put("unit", ingredient[2]);
+            values.put("ingredient_name", ingredientNames[i]);
+            values.put("quantity", quantities[i]);
+            values.put("unit", units[i]);
 
             db.insert("recipe_ingredients", null, values);
         }
     }
 
-    public boolean addIngredient(String name, double quantity,
-                                 String unit, String expiry) {
+    // Returns true if the ingredient was saved successfully.
+    public boolean addIngredient(
+            String name,
+            double quantity,
+            String unit,
+            String expiry) {
+
         SQLiteDatabase db = getWritableDatabase();
+
         ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, name);
+        values.put(COLUMN_NAME, name.trim());
         values.put(COLUMN_QUANTITY, quantity);
         values.put(COLUMN_UNIT, unit);
         values.put(COLUMN_EXPIRY, expiry);
 
-        long result = db.insert(TABLE_PANTRY, null, values);
-        db.close();
-        return result != -1;
-    }
-
-    public boolean updateIngredient(int id, String name, double quantity,
-                                    String unit, String expiry) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, name);
-        values.put(COLUMN_QUANTITY, quantity);
-        values.put(COLUMN_UNIT, unit);
-        values.put(COLUMN_EXPIRY, expiry);
-
-        int result = db.update(TABLE_PANTRY, values,
-                COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
-        db.close();
-        return result > 0;
-    }
-
-    public boolean deleteIngredient(int id) {
-        SQLiteDatabase db = getWritableDatabase();
-        int result = db.delete(TABLE_PANTRY,
-                COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
-        db.close();
-        return result > 0;
+        return db.insert("pantry", null, values) != -1;
     }
 
     public Cursor getAllIngredients() {
-        return getReadableDatabase().query(
-                TABLE_PANTRY, null, null, null, null, null,
-                COLUMN_NAME + " ASC");
+        SQLiteDatabase db = getReadableDatabase();
+
+        return db.query(
+                "pantry", null, null, null, null, null, "name ASC");
     }
 
     public Cursor getIngredientById(int id) {
-        return getReadableDatabase().query(
-                TABLE_PANTRY, null, COLUMN_ID + " = ?",
-                new String[]{String.valueOf(id)}, null, null, null);
+        SQLiteDatabase db = getReadableDatabase();
+
+        return db.query(
+                "pantry",
+                null,
+                COLUMN_ID + " = ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null,
+                null
+        );
+    }
+
+    public int updateIngredient(
+            int id,
+            String name,
+            double quantity,
+            String unit,
+            String expiry) {
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_NAME, name.trim());
+        values.put(COLUMN_QUANTITY, quantity);
+        values.put(COLUMN_UNIT, unit);
+        values.put(COLUMN_EXPIRY, expiry);
+
+        return db.update(
+                "pantry",
+                values,
+                COLUMN_ID + " = ?",
+                new String[]{String.valueOf(id)}
+        );
+    }
+
+    public int deleteIngredient(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        return db.delete(
+                "pantry",
+                COLUMN_ID + " = ?",
+                new String[]{String.valueOf(id)}
+        );
+    }
+
+    public Cursor getAllRecipes() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        return db.query(
+                "recipes", null, null, null, null, null, "name ASC");
+    }
+
+    public Cursor getRecipeIngredients(int recipeId) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        return db.query(
+                "recipe_ingredients",
+                null,
+                "recipe_id = ?",
+                new String[]{String.valueOf(recipeId)},
+                null,
+                null,
+                "ingredient_name ASC"
+        );
     }
 
     public ArrayList<String[]> getMatchingRecipes() {
-        ArrayList<String[]> matches = new ArrayList<>();
+        ArrayList<String[]> matchingRecipes = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
 
-        try (Cursor recipes = db.query(
-                "recipes", new String[]{"id", "name", "method"},
-                null, null, null, null, "name ASC")) {
-
+        try (Cursor recipes = getAllRecipes()) {
             while (recipes.moveToNext()) {
-                long recipeId = recipes.getLong(0);
-                String recipeName = recipes.getString(1);
-                String method = recipes.getString(2);
-                boolean matchesAll = true;
+                int recipeId = recipes.getInt(
+                        recipes.getColumnIndexOrThrow("id"));
+                String recipeName = recipes.getString(
+                        recipes.getColumnIndexOrThrow("name"));
+                String method = recipes.getString(
+                        recipes.getColumnIndexOrThrow("method"));
 
-                try (Cursor required = db.query(
-                        "recipe_ingredients",
-                        new String[]{"ingredient_name", "quantity", "unit"},
-                        "recipe_id = ?", new String[]{String.valueOf(recipeId)},
-                        null, null, null)) {
+                boolean canMake = true;
+                boolean hasRequirements = false;
 
-                    while (required.moveToNext()) {
+                try (Cursor requirements = getRecipeIngredients(recipeId)) {
+                    while (requirements.moveToNext()) {
+                        hasRequirements = true;
+
+                        String ingredient = requirements.getString(
+                                requirements.getColumnIndexOrThrow(
+                                        "ingredient_name"));
+                        double quantity = requirements.getDouble(
+                                requirements.getColumnIndexOrThrow(
+                                        "quantity"));
+                        String unit = requirements.getString(
+                                requirements.getColumnIndexOrThrow("unit"));
+
                         if (!hasEnoughIngredient(
-                                db,
-                                required.getString(0),
-                                required.getDouble(1),
-                                required.getString(2))) {
-                            matchesAll = false;
+                                db, ingredient, quantity, unit)) {
+                            canMake = false;
                             break;
                         }
                     }
                 }
 
-                if (matchesAll) {
-                    matches.add(new String[]{recipeName, method});
+                if (canMake && hasRequirements) {
+                    matchingRecipes.add(new String[]{recipeName, method});
                 }
             }
         }
 
-        return matches;
+        return matchingRecipes;
     }
 
-    private boolean hasEnoughIngredient(SQLiteDatabase db,
-                                        String name, double needed,
-                                        String neededUnit) {
+    private boolean hasEnoughIngredient(
+            SQLiteDatabase db,
+            String requiredName,
+            double requiredQuantity,
+            String requiredUnit) {
+
+        double available = 0;
+        String requiredNameNormalized =
+                normalizeIngredientName(requiredName);
+        String requiredFamily = getUnitFamily(requiredUnit);
+
         try (Cursor pantry = db.query(
-                TABLE_PANTRY,
-                new String[]{COLUMN_NAME, COLUMN_QUANTITY, COLUMN_UNIT},
+                "pantry",
+                new String[]{"name", "quantity", "unit"},
                 null, null, null, null, null)) {
 
             while (pantry.moveToNext()) {
-                String storedName = normalize(pantry.getString(0));
-                String requiredName = normalize(name);
+                String name = pantry.getString(0);
+                double quantity = pantry.getDouble(1);
+                String unit = pantry.getString(2);
 
-                if (!storedName.equals(requiredName)) continue;
-
-                String storedUnit = pantry.getString(2);
-                if (!unitType(storedUnit).equals(unitType(neededUnit))) {
+                if (!normalizeIngredientName(name)
+                        .equals(requiredNameNormalized)) {
                     continue;
                 }
 
-                double available = toBase(pantry.getDouble(1), storedUnit);
-                double required = toBase(needed, neededUnit);
+                if (!getUnitFamily(unit).equals(requiredFamily)) {
+                    continue;
+                }
 
-                if (available >= required) return true;
+                available += convertToBase(quantity, unit);
             }
         }
 
-        return false;
+        return available >= convertToBase(requiredQuantity, requiredUnit);
     }
 
-    private String normalize(String value) {
-        String result = value.trim().toLowerCase(Locale.ROOT);
-        if (result.endsWith("s") && result.length() > 3) {
-            result = result.substring(0, result.length() - 1);
+    private String normalizeIngredientName(String name) {
+        if (name == null) {
+            return "";
         }
-        return result;
+
+        String normalized = name.trim().toLowerCase(Locale.ROOT);
+
+        if (normalized.endsWith("ies") && normalized.length() > 3) {
+            return normalized.substring(0, normalized.length() - 3) + "y";
+        }
+
+        if (normalized.endsWith("s")
+                && !normalized.endsWith("ss")
+                && normalized.length() > 3) {
+            return normalized.substring(0, normalized.length() - 1);
+        }
+
+        return normalized;
     }
 
-    private String unitType(String unit) {
-        String u = unit.trim().toLowerCase(Locale.ROOT);
+    private String normalizeUnit(String unit) {
+        if (unit == null) {
+            return "";
+        }
 
-        if (u.equals("kg") || u.equals("kilogram") ||
-                u.equals("kilograms") || u.equals("g") ||
-                u.equals("gram") || u.equals("grams")) return "weight";
+        String normalized = unit.trim().toLowerCase(Locale.ROOT);
 
-        if (u.equals("l") || u.equals("litre") || u.equals("litres") ||
-                u.equals("liter") || u.equals("liters") ||
-                u.equals("ml") || u.equals("millilitre") ||
-                u.equals("millilitres")) return "volume";
-
-        if (u.equals("piece") || u.equals("pieces") ||
-                u.equals("pc") || u.equals("pcs")) return "pieces";
-
-        return u;
+        switch (normalized) {
+            case "piece":
+            case "pieces":
+            case "pc":
+            case "pcs":
+                return "pieces";
+            case "gram":
+            case "grams":
+                return "g";
+            case "kilogram":
+            case "kilograms":
+                return "kg";
+            case "millilitre":
+            case "millilitres":
+            case "milliliter":
+            case "milliliters":
+                return "ml";
+            case "litre":
+            case "litres":
+            case "liter":
+            case "liters":
+                return "l";
+            default:
+                return normalized;
+        }
     }
 
-    private double toBase(double quantity, String unit) {
-        String u = unit.trim().toLowerCase(Locale.ROOT);
+    private String getUnitFamily(String unit) {
+        String normalized = normalizeUnit(unit);
 
-        if (u.equals("kg") || u.equals("kilogram") ||
-                u.equals("kilograms")) return quantity * 1000;
+        switch (normalized) {
+            case "g":
+            case "kg":
+                return "weight";
+            case "ml":
+            case "l":
+                return "liquid";
+            case "pieces":
+                return "pieces";
+            default:
+                return normalized;
+        }
+    }
 
-        if (u.equals("l") || u.equals("litre") || u.equals("litres") ||
-                u.equals("liter") || u.equals("liters")) return quantity * 1000;
+    private double convertToBase(double quantity, String unit) {
+        String normalized = normalizeUnit(unit);
 
-        return quantity;
+        switch (normalized) {
+            case "kg":
+            case "l":
+                return quantity * 1000.0;
+            default:
+                return quantity;
+        }
     }
 }

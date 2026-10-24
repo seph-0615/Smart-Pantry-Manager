@@ -48,30 +48,60 @@ public class AddEditIngredientActivity extends AppCompatActivity {
     private void loadIngredient() {
         Cursor cursor = databaseHelper.getIngredientById(ingredientId);
 
-        if (cursor != null) {
+        if (cursor == null) {
+            Toast.makeText(
+                    this,
+                    "Could not load ingredient.",
+                    Toast.LENGTH_LONG
+            ).show();
+            return;
+        }
+
+        try {
             if (cursor.moveToFirst()) {
                 String name = cursor.getString(
                         cursor.getColumnIndexOrThrow(
-                                DatabaseHelper.COLUMN_NAME));
+                                DatabaseHelper.COLUMN_NAME
+                        )
+                );
 
                 double quantity = cursor.getDouble(
                         cursor.getColumnIndexOrThrow(
-                                DatabaseHelper.COLUMN_QUANTITY));
+                                DatabaseHelper.COLUMN_QUANTITY
+                        )
+                );
 
                 String unit = cursor.getString(
                         cursor.getColumnIndexOrThrow(
-                                DatabaseHelper.COLUMN_UNIT));
+                                DatabaseHelper.COLUMN_UNIT
+                        )
+                );
 
                 String expiry = cursor.getString(
                         cursor.getColumnIndexOrThrow(
-                                DatabaseHelper.COLUMN_EXPIRY));
+                                DatabaseHelper.COLUMN_EXPIRY
+                        )
+                );
 
                 editName.setText(name);
                 editQuantity.setText(String.valueOf(quantity));
                 editUnit.setText(unit);
                 editExpiry.setText(expiry == null ? "" : expiry);
+            } else {
+                Toast.makeText(
+                        this,
+                        "Ingredient not found.",
+                        Toast.LENGTH_SHORT
+                ).show();
+                finish();
             }
-
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(
+                    this,
+                    "Could not read ingredient details.",
+                    Toast.LENGTH_LONG
+            ).show();
+        } finally {
             cursor.close();
         }
     }
@@ -104,8 +134,12 @@ public class AddEditIngredientActivity extends AppCompatActivity {
             return;
         }
 
-        if (quantity <= 0) {
-            editQuantity.setError("Quantity must be greater than zero");
+        if (Double.isNaN(quantity)
+                || Double.isInfinite(quantity)
+                || quantity <= 0) {
+            editQuantity.setError(
+                    "Quantity must be a positive number"
+            );
             editQuantity.requestFocus();
             return;
         }
@@ -120,10 +154,19 @@ public class AddEditIngredientActivity extends AppCompatActivity {
 
         if (ingredientId == -1) {
             saved = databaseHelper.addIngredient(
-                    name, quantity, unit, expiry);
+                    name,
+                    quantity,
+                    unit,
+                    expiry
+            );
         } else {
             saved = databaseHelper.updateIngredient(
-                    ingredientId, name, quantity, unit, expiry);
+                    ingredientId,
+                    name,
+                    quantity,
+                    unit,
+                    expiry
+            ) > 0;
         }
 
         if (saved) {
@@ -131,7 +174,12 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                     ? "Ingredient saved!"
                     : "Ingredient updated!";
 
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    this,
+                    message,
+                    Toast.LENGTH_SHORT
+            ).show();
+
             finish();
         } else {
             Toast.makeText(
@@ -140,5 +188,14 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG
             ).show();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (databaseHelper != null) {
+            databaseHelper.close();
+        }
+
+        super.onDestroy();
     }
 }

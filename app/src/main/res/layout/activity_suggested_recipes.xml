@@ -2,44 +2,56 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#F5F7F2"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="20dp">
+
+        <View
+            android:layout_width="48dp"
+            android:layout_height="5dp"
+            android:layout_marginBottom="20dp"
+            android:background="#F28C28" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Suggested Recipes"
-            android:textColor="#1B5E20"
-            android:textSize="26sp"
+            android:text="Recipe Ideas 🍲"
+            android:textColor="#204C37"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Recipes made with ingredients you already have."
-            android:textColor="#555555"
-            android:textSize="16sp" />
+            android:layout_marginBottom="20dp"
+            android:text="Discover meals based on the ingredients in your pantry."
+            android:textColor="#6B756D"
+            android:textSize="15sp" />
 
-        <Button
-            android:id="@+id/btnRefreshRecipes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Find Matching Recipes" />
-
+        <!-- Existing Java code adds recipe cards here -->
         <LinearLayout
             android:id="@+id/recipeContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:orientation="vertical" />
 
+        <!-- Refresh button used by the existing Java code -->
+        <Button
+            android:id="@+id/btnRefreshRecipes"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#F28C28"
+            android:text="Refresh Recipes"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
     </LinearLayout>
+
 </ScrollView>
