@@ -68,13 +68,26 @@ The project contains Java source files, XML layouts, drawable resources, and dat
 
 ## Database
 
-SQLite stores pantry ingredient information locally. Ingredient records include:
+Smart Pantry Manager uses SQLite to store pantry information locally on the Android device. The database supports creating, viewing, updating, and deleting pantry ingredients.
 
+Each pantry ingredient contains:
 - Ingredient ID
 - Ingredient name
 - Quantity
 - Unit
 - Expiry date
+
+### Recipe Storage and Matching
+
+The application includes a recipe collection stored in the SQLite database. Each recipe contains a name, required ingredients, and preparation instructions.
+
+The Suggested Recipes feature is intended to display only recipes whose required ingredients are available in the user's pantry in the required quantities. Recipes with missing ingredients must not appear in the strict suggestions list.
+
+Recipe matching should also account for simple ingredient-name differences where supported by the implementation.
+
+### Data Persistence
+
+SQLite stores application data locally so saved pantry records can remain available after the application is closed and reopened. This behaviour must be verified through application testing.
 
 ## Future Improvements
 
