@@ -42,7 +42,6 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         Button btnSave = findViewById(R.id.btnSaveIngredient);
 
         databaseHelper = new DatabaseHelper(this);
-
         dateFormat.setLenient(false);
 
         ingredientId = getIntent().getIntExtra("ingredient_id", -1);
@@ -180,44 +179,37 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         String unit = editUnit.getText().toString().trim();
         String expiry = editExpiry.getText().toString().trim();
 
-        if (name.isEmpty()) {
-            editName.setError("Enter an ingredient name");
+        // Validate ingredient name.
+        String nameError = IngredientValidator.validateName(name);
+
+        if (nameError != null) {
+            editName.setError(nameError);
             editName.requestFocus();
             return;
         }
 
-        if (quantityText.isEmpty()) {
-            editQuantity.setError("Enter a quantity");
+        // Validate quantity before parsing it.
+        String quantityError =
+                IngredientValidator.validateQuantity(quantityText);
+
+        if (quantityError != null) {
+            editQuantity.setError(quantityError);
             editQuantity.requestFocus();
             return;
         }
 
-        double quantity;
+        double quantity = Double.parseDouble(quantityText);
 
-        try {
-            quantity = Double.parseDouble(quantityText);
-        } catch (NumberFormatException e) {
-            editQuantity.setError("Enter a valid number");
-            editQuantity.requestFocus();
-            return;
-        }
+        // Validate measurement unit.
+        String unitError = IngredientValidator.validateUnit(unit);
 
-        if (Double.isNaN(quantity)
-                || Double.isInfinite(quantity)
-                || quantity <= 0) {
-            editQuantity.setError(
-                    "Quantity must be greater than zero"
-            );
-            editQuantity.requestFocus();
-            return;
-        }
-
-        if (unit.isEmpty()) {
-            editUnit.setError("Enter a unit, e.g. kg or pieces");
+        if (unitError != null) {
+            editUnit.setError(unitError);
             editUnit.requestFocus();
             return;
         }
 
+        // Expiry date is optional, but must be valid if supplied.
         if (!expiry.isEmpty()) {
             try {
                 Date parsedDate = dateFormat.parse(expiry);
@@ -228,9 +220,7 @@ public class AddEditIngredientActivity extends AppCompatActivity {
                 }
 
             } catch (ParseException e) {
-                editExpiry.setError(
-                        "Choose a valid expiry date"
-                );
+                editExpiry.setError("Choose a valid expiry date");
                 editExpiry.requestFocus();
                 return;
             }
