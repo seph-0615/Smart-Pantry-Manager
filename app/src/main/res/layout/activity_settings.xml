@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Home navigation header -->
         <include layout="@layout/header_back_home" />
 
         <LinearLayout
@@ -42,24 +41,23 @@
                 android:textColor="#647066"
                 android:textSize="15sp" />
 
-            <!-- Preferences -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
+                android:letterSpacing="0.1"
                 android:text="PREFERENCES"
                 android:textColor="#718071"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.1" />
+                android:textStyle="bold" />
 
             <!-- Appearance -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/dashboard_card_background"
                 android:orientation="vertical"
-                android:padding="18dp"
-                android:background="@drawable/dashboard_card_background">
+                android:padding="18dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -84,10 +82,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:orientation="horizontal"
+                android:background="@drawable/dashboard_card_background"
                 android:gravity="center_vertical"
-                android:padding="18dp"
-                android:background="@drawable/dashboard_card_background">
+                android:orientation="horizontal"
+                android:padding="18dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -113,7 +111,7 @@
 
                 </LinearLayout>
 
-                <Switch
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchExpiryReminders"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -125,15 +123,15 @@
 
             </LinearLayout>
 
-            <!-- Low stock alerts -->
+            <!-- Low-stock alerts -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:orientation="horizontal"
+                android:background="@drawable/dashboard_card_background"
                 android:gravity="center_vertical"
-                android:padding="18dp"
-                android:background="@drawable/dashboard_card_background">
+                android:orientation="horizontal"
+                android:padding="18dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -159,7 +157,7 @@
 
                 </LinearLayout>
 
-                <Switch
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchLowStockAlerts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -177,18 +175,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="28dp"
                 android:layout_marginBottom="12dp"
+                android:letterSpacing="0.1"
                 android:text="ABOUT"
                 android:textColor="#718071"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.1" />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/dashboard_card_background"
                 android:orientation="vertical"
-                android:padding="18dp"
-                android:background="@drawable/dashboard_card_background">
+                android:padding="18dp">
 
                 <TextView
                     android:layout_width="match_parent"
